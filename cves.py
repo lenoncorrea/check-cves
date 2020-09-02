@@ -31,8 +31,8 @@ class Bot:
 
   def send_message(self,cve,summary):
     text = urllib.parse.quote_plus(summary)
-    url = self.baseUrl + "sendMessage?text={}+\nSummary:{}&chat_id={}&parse_mode=Markdown".format(cve,summary, self.chat_id)
-    print(url)
+    url = self.baseUrl + "sendMessage?text={}+\nSummary:ls
+    {}&chat_id={}&parse_mode=Markdown".format(cve,summary, self.chat_id)
     self.get_url(url)
     return None
 
