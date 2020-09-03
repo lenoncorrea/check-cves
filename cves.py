@@ -5,7 +5,7 @@
 # comment:      Coletar informacoes das ultimas Cves descobertas
 # author:       Lenon Corrêa <lenonac_@hotmail.com>
 # date:         01-09-2020
-# Last updated: 02-09-2020 17:13:00
+# Last updated: 03-09-2020
 #--------------------------------------------------------------------
 
 import requests
