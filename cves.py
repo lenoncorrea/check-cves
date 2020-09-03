@@ -30,11 +30,11 @@ class Bot:
     return content
 
   def send_message(self,cve,summary):
-    text = urllib.parse.quote_plus(summary)
-    url = self.baseUrl + "sendMessage?text={}+\nSummary:ls
-    {}&chat_id={}&parse_mode=Markdown".format(cve,summary, self.chat_id)
+    cve = urllib.parse.quote_plus(cve)
+    summary = urllib.parse.quote_plus(summary)
+    url = self.baseUrl + "sendMessage?text={}\nSummary: {}&chat_id={}&parse_mode=Markdown".format(cve,summary,self.chat_id)
     self.get_url(url)
-    return None
+    return True
 
 class Cves:
   def __init__(self):
@@ -46,28 +46,29 @@ class Cves:
       results = json.loads(result)
       return results
   
-  def check_cve(self,results):
+  def check_cve(self,results,last_result):
+    if (results == last_result):
+      sleep (300)
+      request = self.requesting()
+      self.check_cve(request,last_result)
+    else:
       for data in results:
-        cve_id = data['id']
-        cve_summary = data['summary']
-      return cve_id,cve_summary
+        if data not in last_result:
+          cve_id = data['id']
+          cve_summary = data['summary']
+          bot = Bot()
+          bot.send_message(cve_id,cve_summary)
+        last_result = results
+      sleep (300)
+      request = self.requesting()
+      self.check_cve(request,last_result)
 
-def main(cve_id):
+def main():
   cve = Cves()
   request = cve.requesting()
-  last_cve = cve.check_cve(request)
-  if (cve_id == last_cve[0]):
-    sleep (300)
-    main(cve_id)
-  else:
-    cve_id = last_cve[0]
-    cve_summary = last_cve[1]
-    bot = Bot()
-    res = bot.send_message(cve_id,cve_summary)
-    sleep(300)
-    main(cve_id)
-    
+  last_result = []
+  check = cve.check_cve(request,last_result)
+      
 if __name__ == '__main__':
-  cve_id = 0
-  result = main(cve_id)
+  result = main()
   
