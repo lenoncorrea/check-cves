@@ -34,7 +34,6 @@ class Bot:
     summary = urllib.parse.quote_plus(summary)
     url = self.baseUrl + "sendMessage?text={}\nSummary: {}&chat_id={}&parse_mode=Markdown".format(cve,summary,self.chat_id)
     self.get_url(url)
-    return True
 
 class Cves:
   def __init__(self):
@@ -58,7 +57,7 @@ class Cves:
           cve_summary = data['summary']
           bot = Bot()
           bot.send_message(cve_id,cve_summary)
-        last_result = results
+      last_result = results
       sleep (300)
       request = self.requesting()
       self.check_cve(request,last_result)
