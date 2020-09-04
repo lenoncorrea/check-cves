@@ -5,7 +5,7 @@
 # comment:      Coletar informacoes das ultimas Cves descobertas
 # author:       Lenon Corrêa <lenonac_@hotmail.com>
 # date:         01-09-2020
-# Last updated: 03-09-2020
+# Last updated: 04-09-2020
 #--------------------------------------------------------------------
 
 import requests
@@ -15,11 +15,9 @@ from time import sleep
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
-
-
 class Bot:
   def __init__(self):
+    load_dotenv()
     token = os.getenv("TOKEN")
     self.chat_id = os.getenv("CHAT_ID")
     self.baseUrl = "https://api.telegram.org/bot{}/".format(token)
@@ -29,10 +27,10 @@ class Bot:
     content = response.content.decode("utf8")
     return content
 
-  def send_message(self,cve,summary):
+  def send_message(self,cve,summary,reference):
     cve = urllib.parse.quote_plus(cve)
     summary = urllib.parse.quote_plus(summary)
-    url = self.baseUrl + "sendMessage?text={}\nSummary: {}&chat_id={}&parse_mode=Markdown".format(cve,summary,self.chat_id)
+    url = self.baseUrl + "sendMessage?text={}\nSummary: {}\nReference: {}&chat_id={}&parse_mode=Markdown".format(cve,summary,reference,self.chat_id)
     self.get_url(url)
 
 class Cves:
@@ -55,8 +53,9 @@ class Cves:
         if data not in last_result:
           cve_id = data['id']
           cve_summary = data['summary']
+          cve_link = data['references'][0]
           bot = Bot()
-          bot.send_message(cve_id,cve_summary)
+          bot.send_message(cve_id,cve_summary,cve_link)
       last_result = results
       sleep (300)
       request = self.requesting()
