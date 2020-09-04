@@ -53,7 +53,7 @@ class Cves:
         if data not in last_result:
           cve_id = data['id']
           cve_summary = data['summary']
-          cve_link = data['references'][0]
+          cve_link = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name='+data['id']
           bot = Bot()
           bot.send_message(cve_id,cve_summary,cve_link)
       last_result = results
