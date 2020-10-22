@@ -45,7 +45,7 @@ class Cves:
   
   def check_cve(self,results,last_result):
     if (results == last_result):
-      sleep (300)
+      sleep (600)
       request = self.requesting()
       self.check_cve(request,last_result)
     else:
@@ -57,7 +57,7 @@ class Cves:
           bot = Bot()
           bot.send_message(cve_id,cve_summary,cve_link)
       last_result = results
-      sleep (300)
+      sleep (600)
       request = self.requesting()
       self.check_cve(request,last_result)
 
