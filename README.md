@@ -28,11 +28,13 @@ CHAT_ID="" --> USUÁRIO OU GRUPO QUE IRÁ RECEBER
 
 ```
 ## Colocando em funcionamento
-Para o nosso script funcionar, é só colocar rodar, com o comando abaixo.
+Para o nosso script funcionar, é só colocar rodar lincando o service.
 ```bash
-/usr/lib/zabbix/externalscripts/check-cves/venv/bin/python cves.py nohup
+ln -s /usr/lib/zabbix/externalscripts/check-cves/check-cves.service /etc/systemd/system/
+systemctl enable check-cves.service
+systemctl start check-cves.service
 ```
-### Apóso comando acima, o terminal ficara rodando, aí vem a mágica, use um 'CTRL+Z' e o terminal vai fechar e parar o script. Em seguida digite 'bg' no terminal, e nosso script vai seguir rodando em background.
+### Após isso, nosso script fara o envio das CVE's
 
 ## Contribuição
 Achou algum bug ou tem uma sugestão de melhoria? Envie-me!
