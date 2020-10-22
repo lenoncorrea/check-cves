@@ -1,0 +1,12 @@
+[Unit]
+Description=Check CVE's Mitre
+After=network.target
+
+[Service]
+Type=simple 
+WorkingDirectory=/usr/lib/zabbix/externalscripts/check-cves
+ExecStart=/usr/lib/zabbix/externalscripts/check-cves/venv/bin/python /usr/lib/zabbix/externalscripts/check-cves/cves.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
