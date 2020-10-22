@@ -14,39 +14,6 @@ import urllib
 from time import sleep
 from dotenv import load_dotenv
 import os
-import socket
-
-class Socket:
-  def __init__(self):
-    host = ""   #Nome ou endereço IP da máquina servidora
-    port = 3000 #Porta que o servidor vai aguardar conexões
-    createsock = self.create_socket(host,port)
-    opensock = self.open_socket(createsock)
-    
-  def create_socket(self,host,port):
-    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   # Cria um socket usando o protocolo TCP
-    soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # Fecha o socket caso o programa seja interrompido, por exemplo, com CONTROL+C
-    soc.bind((host,port))   # Associa a porta e o host ao socket
-    return soc
-  
-  def open_socket(self,soc):
-    soc.listen(100)   # Inicia uma thread que aguarda por uma conexão
-    while True:   # Loop infinito que aguarda conexões, uma de cada vez
-      print("Aguardando conexão na porta 3000")
-      con, client = soc.accept()
-      while True:
-        msg = con.recv(1024).decode()
-        print("Recebeu de " + str(client) + ": " + msg)
-        print(">> " + str(client) + ": " + msg)
-        cve = Cves()
-        request = cve.requesting()
-        last_result = []
-        check = cve.check_cve(request,last_result)
-        con.sendall('request'.encode())   #Envia para o cliente o conteúdo da variável resultado 
-    
-
-    # con.sendall(resultado.encode())   #Envia para o cliente o conteúdo da variável resultado
-  # con.close()
 
 class Bot:
   def __init__(self):
@@ -78,31 +45,27 @@ class Cves:
   
   def check_cve(self,results,last_result):
     if (results == last_result):
-      return results
-      # sleep (600)
-      # request = self.requesting()
-      # self.check_cve(request,last_result)
+      sleep (300)
+      request = self.requesting()
+      self.check_cve(request,last_result)
     else:
       for data in results:
         if data not in last_result:
           cve_id = data['id']
           cve_summary = data['summary']
           cve_link = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name='+data['id']
-          # bot = Bot()
-          # bot.send_message(cve_id,cve_summary,cve_link)
+          bot = Bot()
+          bot.send_message(cve_id,cve_summary,cve_link)
       last_result = results
-      # sleep (300)
-      # request = self.requesting()
-      # self.check_cve(request,last_result)
-      return results
+      sleep (300)
+      request = self.requesting()
+      self.check_cve(request,last_result)
 
 def main():
-  socket = Socket()
-  socket.create_socket()
-  # cve = Cves()
-  # request = cve.requesting()
-  # last_result = []
-  # check = cve.check_cve(request,last_result)
+  cve = Cves()
+  request = cve.requesting()
+  last_result = []
+  check = cve.check_cve(request,last_result)
       
 if __name__ == '__main__':
   result = main()
